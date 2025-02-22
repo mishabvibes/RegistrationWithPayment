@@ -180,13 +180,19 @@ const RegistrationPage = () => {
         }
       };
 
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && window.Razorpay) {
         const razorpay = new window.Razorpay(options);
         razorpay.open();
+      } else {
+        console.error('Razorpay is not available');
       }
     } catch (error) {
       console.error('Payment failed:', error);
-      alert(error.message);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unexpected error occurred.');
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -256,7 +262,13 @@ const RegistrationPage = () => {
   // Show registration form
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          console.log('Razorpay script loaded');
+        }}
+      />
       
       <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
         <div className="p-6">
@@ -354,10 +366,6 @@ const RegistrationPage = () => {
           </div>
         </div>
       </div>
-      <Script
-  src="https://checkout.razorpay.com/v1/checkout.js"
-  strategy="afterInteractive"
-/>
     </div>
   );
 };
