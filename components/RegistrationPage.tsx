@@ -344,7 +344,7 @@ const RegistrationPage = () => {
                   type="text"
                   value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="Enter your address"
+                  placeholder="Enter your place"
                   className={`w-full px-4 py-2 rounded-lg border ${
                     errors.address ? 'border-red-500' : 'border-slate-300'
                   } focus:outline-none focus:ring-2 focus:ring-slate-400`}
