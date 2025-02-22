@@ -263,7 +263,7 @@ const RegistrationPage = () => {
   return (
     <div className="min-h-screen bg-slate-200">
       {/* Home Page Section (Hero Section) */}
-      <div className="h-screen flex flex-col items-center justify-center text-center pt-2 p-4 bg-[#2D6CCB] relative overflow-hidden">
+      <div className="h-screen flex flex-col items-center justify-center text-center pt-2 pb-4 bg-[#2D6CCB] relative overflow-hidden">
         {/* Background Blur Effect */}
         <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
   
@@ -275,7 +275,7 @@ const RegistrationPage = () => {
         />
   
         {/* Subheadline */}
-        <p className="text-xl text-slate-300 mb-8 z-10 leading-tight">
+        <p className="text-sm md:text-lg  text-slate-300 mb-8 z-10 leading-tight p-6">
         Welcome to the Miskunnusook quiz this Ramadan on our Dars website! Test your knowledge with essays from Darshanam Online Magazine and compete for ₹25,000 in prizes. Top prize is ₹15,000, second prize ₹7,777. Good luck to all!
         </p>
   
@@ -287,7 +287,7 @@ const RegistrationPage = () => {
               formElement.scrollIntoView({ behavior: "smooth" });
             }
           }}          
-          className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 z-10"
+          className="px-8 py-3 bg-gradient-to-r lg:hidden from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 z-10"
         >
           Get Started
         </button>
