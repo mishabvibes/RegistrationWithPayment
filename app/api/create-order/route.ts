@@ -13,7 +13,8 @@ const razorpay = new Razorpay({
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
-    const { name, phone, address } = await request.json();
+    // Destructure only phone since it's the only variable we're using
+    const { phone } = await request.json();
 
     // Check for existing registration
     const existingRegistration = await Registration.findOne({ phone });
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Create Razorpay order
     const order = await razorpay.orders.create({
-      amount: 100 * 100,
+      amount: 70 * 100,
       currency: 'INR',
       receipt: 'receipt_' + Math.random().toString(36).substring(7),
     });

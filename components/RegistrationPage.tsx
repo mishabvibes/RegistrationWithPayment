@@ -11,7 +11,8 @@ const RegistrationPage = () => {
   const [isPaymentComplete, setIsPaymentComplete] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [registrationCode, setRegistrationCode] = useState('');
-  
+  const [isCopied, setIsCopied] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -159,7 +160,7 @@ const RegistrationPage = () => {
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: 100 * 100,
+        amount: 70 * 100,
         currency: 'INR',
         name: 'Your Company Name',
         description: 'Registration Fee',
@@ -184,30 +185,48 @@ const RegistrationPage = () => {
     }
   };
 
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(registrationCode).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    });
+  };
+
+  // Show success screen
   if (showSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-center text-green-600 mb-6">
-              Registration Successful!
+        <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-2xl overflow-hidden">
+          <div className="p-8">
+            <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
+              Registration Successful! 🎉
             </h2>
-            
+  
             <div className="text-center mb-8">
-              <p className="text-4xl font-bold text-slate-800 mb-2">{registrationCode}</p>
-              <p className="text-sm text-slate-600">Your Registration Code</p>
-            </div>
-
-            <div className="bg-green-50 p-4 rounded-lg">
-              <p className="text-center text-sm text-green-800">
-                Join our WhatsApp group using this link:
-                <a 
-                  href="https://whatsapp.group/example" 
-                  className="block mt-2 text-green-600 hover:text-green-700 font-medium"
-                >
-                  Click to Join WhatsApp Group →
-                </a>
+              <p className="text-5xl font-bold text-slate-800 mb-4">
+                {registrationCode}
               </p>
+              <p className="text-sm text-slate-600 mb-4">Your Registration Code</p>
+              <button
+                onClick={handleCopyCode}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                {isCopied ? "Copied! ✅" : "Copy Code"}
+              </button>
+            </div>
+  
+            <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200 shadow-inner">
+              <p className="text-center text-sm text-green-800 mb-4">
+                Join our WhatsApp group using this link:
+              </p>
+              <a
+                href="https://whatsapp.group/example"
+                className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-center"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Click to Join WhatsApp Group →
+              </a>
             </div>
           </div>
         </div>
@@ -215,6 +234,7 @@ const RegistrationPage = () => {
     );
   }
 
+  // Show payment processing screen
   if (isPaymentComplete) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
@@ -225,6 +245,8 @@ const RegistrationPage = () => {
       </div>
     );
   }
+
+  // Show registration form
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -327,7 +349,6 @@ const RegistrationPage = () => {
       </div>
     </div>
   );
-
 };
 
 export default RegistrationPage;
