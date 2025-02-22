@@ -230,7 +230,7 @@ const RegistrationPage = () => {
   
             <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200 shadow-inner">
               <p className="text-center text-sm text-green-800 mb-4">
-                Join our WhatsApp group using this link:
+                Join our WhatsApp community using this link:
               </p>
               <a
                 href="https://chat.whatsapp.com/FlQKNJqgbisLF3LvDw5ZaD"
