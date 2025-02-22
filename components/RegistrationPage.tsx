@@ -1,10 +1,15 @@
-// components/RegistrationPage.tsx
-
 "use client";
 
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
+
+// Define the type for Razorpay payment response
+type RazorpayPaymentResponse = {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+};
 
 const RegistrationPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -45,7 +50,7 @@ const RegistrationPage = () => {
   };
 
   // Handle successful payment and registration
-  const handleSuccessfulPayment = async (paymentResponse) => {
+  const handleSuccessfulPayment = async (paymentResponse: RazorpayPaymentResponse) => {
     setIsPaymentComplete(true);
     
     try {
@@ -111,7 +116,7 @@ const RegistrationPage = () => {
     return isValid;
   };
 
-  const handleInputChange = async (e) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
