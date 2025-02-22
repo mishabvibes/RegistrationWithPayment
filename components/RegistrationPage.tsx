@@ -354,6 +354,10 @@ const RegistrationPage = () => {
           </div>
         </div>
       </div>
+      <Script
+  src="https://checkout.razorpay.com/v1/checkout.js"
+  strategy="afterInteractive"
+/>
     </div>
   );
 };
