@@ -33,7 +33,7 @@ const RegistrationPage = () => {
   // Generate a unique registration code
   const generateUniqueCode = async () => {
     while (true) {
-      const code = 'RQ' + Math.floor(Math.random() * 9000 + 1000); // 4 digit number (1000-9999)
+      const code = 'MN' + Math.floor(Math.random() * 9000 + 1000); // 4 digit number (1000-9999)
       
       // Check if code exists
       const response = await fetch('/api/check-code', {
@@ -238,7 +238,7 @@ const RegistrationPage = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Click to Join WhatsApp Group →
+                Click to Join WhatsApp Community →
               </a>
             </div>
           </div>
