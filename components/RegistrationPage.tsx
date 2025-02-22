@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
-
+import img1 from '@/public/misk.png'
 // Define the type for Razorpay payment response
 type RazorpayPaymentResponse = {
   razorpay_payment_id: string;
@@ -233,7 +233,7 @@ const RegistrationPage = () => {
                 Join our WhatsApp group using this link:
               </p>
               <a
-                href="https://whatsapp.group/example"
+                href="https://chat.whatsapp.com/FlQKNJqgbisLF3LvDw5ZaD"
                 className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-center"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -261,7 +261,143 @@ const RegistrationPage = () => {
 
   // Show registration form
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-200">
+      {/* Home Page Section (Hero Section) */}
+      <div className="h-screen flex flex-col items-center justify-center text-center pt-2 p-4 bg-[#2D6CCB] relative overflow-hidden">
+        {/* Background Blur Effect */}
+        <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
+  
+        {/* Replace Logo and Heading with a PNG Image */}
+        <img
+          src="/img.png" // Replace with your PNG image path
+          alt="Hero Image"
+          className="w-full max-w-xl mb-0 z-10" // Adjust size as needed
+        />
+  
+        {/* Subheadline */}
+        <p className="text-xl text-slate-300 mb-8 z-10 leading-tight">
+        Welcome to the Miskunnusook quiz this Ramadan on our Dars website! Test your knowledge with essays from Darshanam Online Magazine and compete for ₹25,000 in prizes. Top prize is ₹15,000, second prize ₹7,777. Good luck to all!
+        </p>
+  
+        {/* Call-to-Action Button */}
+        <button
+          onClick={() => {
+            // Scroll to the registration form
+            document.getElementById("registration-form").scrollIntoView({ behavior: "smooth" });
+          }}
+          className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 z-10"
+        >
+          Get Started
+        </button>
+  
+        {/* Animated Background Shapes */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute w-64 h-64 bg-purple-500/20 rounded-full -top-32 -left-32 animate-pulse"></div>
+          <div className="absolute w-48 h-48 bg-pink-500/20 rounded-full -bottom-24 -right-24 animate-pulse"></div>
+        </div>
+      </div>
+  
+      {/* Registration Form Section */}
+      <div id="registration-form" className="w-full flex items-center justify-center p-4 -mt-20 z-20 relative shadow-lg">
+        <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">
+              Registration Form
+            </h2>
+  
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label 
+                  htmlFor="name" 
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.name ? 'border-red-500' : 'border-slate-300'
+                  } focus:outline-none focus:ring-2 focus:ring-slate-400`}
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500 mt-1">{errors.name}</p>
+                )}
+              </div>
+  
+              <div className="space-y-2">
+                <label 
+                  htmlFor="address" 
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Place
+                </label>
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  placeholder="Enter your address"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.address ? 'border-red-500' : 'border-slate-300'
+                  } focus:outline-none focus:ring-2 focus:ring-slate-400`}
+                />
+                {errors.address && (
+                  <p className="text-sm text-red-500 mt-1">{errors.address}</p>
+                )}
+              </div>
+  
+              <div className="space-y-2">
+                <label 
+                  htmlFor="phone" 
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Whatsapp Number
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Enter your phone number"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.phone ? 'border-red-500' : 'border-slate-300'
+                  } focus:outline-none focus:ring-2 focus:ring-slate-400`}
+                />
+                {errors.phone && (
+                  <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+                )}
+              </div>
+  
+              <button
+                onClick={handlePayment}
+                disabled={isProcessing}
+                className="w-full bg-slate-900 text-white py-2 px-4 rounded-lg font-medium
+                  hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400
+                  disabled:bg-slate-400 disabled:cursor-not-allowed
+                  transition-colors duration-200 ease-in-out"
+              >
+                {isProcessing ? (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    Processing...
+                  </div>
+                ) : (
+                  'Proceed to Payment'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      {/* Razorpay Script */}
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
         strategy="afterInteractive"
@@ -269,103 +405,6 @@ const RegistrationPage = () => {
           console.log('Razorpay script loaded');
         }}
       />
-      
-      <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">
-            Registration Form
-          </h2>
-
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label 
-                htmlFor="name" 
-                className="block text-sm font-medium text-slate-700"
-              >
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Enter your full name"
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.name ? 'border-red-500' : 'border-slate-300'
-                } focus:outline-none focus:ring-2 focus:ring-slate-400`}
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500 mt-1">{errors.name}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label 
-                htmlFor="address" 
-                className="block text-sm font-medium text-slate-700"
-              >
-                Address
-              </label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="Enter your address"
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.address ? 'border-red-500' : 'border-slate-300'
-                } focus:outline-none focus:ring-2 focus:ring-slate-400`}
-              />
-              {errors.address && (
-                <p className="text-sm text-red-500 mt-1">{errors.address}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label 
-                htmlFor="phone" 
-                className="block text-sm font-medium text-slate-700"
-              >
-                Phone Number
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="Enter your phone number"
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.phone ? 'border-red-500' : 'border-slate-300'
-                } focus:outline-none focus:ring-2 focus:ring-slate-400`}
-              />
-              {errors.phone && (
-                <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
-              )}
-            </div>
-
-            <button
-              onClick={handlePayment}
-              disabled={isProcessing}
-              className="w-full bg-slate-900 text-white py-2 px-4 rounded-lg font-medium
-                hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400
-                disabled:bg-slate-400 disabled:cursor-not-allowed
-                transition-colors duration-200 ease-in-out"
-            >
-              {isProcessing ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Processing...
-                </div>
-              ) : (
-                'Proceed to Payment'
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
