@@ -3,8 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { Loader2, Search, Download, Phone, User, MapPin, CreditCard } from 'lucide-react';
 
+// Define the type for a registration object
+type Registration = {
+  registrationCode: string;
+  name: string;
+  phone: string;
+  address: string;
+  paymentId: string;
+};
+
 const RegistrationDetails = () => {
-  const [registrations, setRegistrations] = useState([]);
+  const [registrations, setRegistrations] = useState<Registration[]>([]); // Apply the type here
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
@@ -27,7 +36,7 @@ const RegistrationDetails = () => {
     }
   };
 
-  const filteredRegistrations = registrations.filter(reg =>
+  const filteredRegistrations = registrations.filter((reg) =>
     reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     reg.phone.includes(searchTerm) ||
     reg.registrationCode.includes(searchTerm)
@@ -50,7 +59,7 @@ const RegistrationDetails = () => {
   };
 
   // Mobile card view component
-  const RegistrationCard = ({ registration }) => (
+  const RegistrationCard = ({ registration }: { registration: Registration }) => (
     <div className="bg-white rounded-lg shadow p-4 mb-4">
       <div className="flex justify-between items-start mb-3">
         <span className="bg-slate-100 text-slate-800 px-2 py-1 rounded text-sm font-medium">
