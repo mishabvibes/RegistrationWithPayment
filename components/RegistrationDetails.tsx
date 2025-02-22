@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Loader2, Search, Download, Phone, User, MapPin, CreditCard, Tag } from 'lucide-react';
+import { Loader2, Search, Download, Phone, User, MapPin, CreditCard } from 'lucide-react';
 
 const RegistrationDetails = () => {
   const [registrations, setRegistrations] = useState([]);
