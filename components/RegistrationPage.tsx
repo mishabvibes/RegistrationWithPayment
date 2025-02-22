@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
-import img1 from '@/public/misk.png'
+
 // Define the type for Razorpay payment response
 type RazorpayPaymentResponse = {
   razorpay_payment_id: string;
@@ -282,9 +282,11 @@ const RegistrationPage = () => {
         {/* Call-to-Action Button */}
         <button
           onClick={() => {
-            // Scroll to the registration form
-            document.getElementById("registration-form").scrollIntoView({ behavior: "smooth" });
-          }}
+            const formElement = document.getElementById("registration-form");
+            if (formElement) {
+              formElement.scrollIntoView({ behavior: "smooth" });
+            }
+          }}          
           className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg hover:from-yellow-300 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 z-10"
         >
           Get Started
