@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MISKUNNUSOOK",
-  description: "Regitration form",
+  title: "Miskunnusook - Ramadan Quiz | Alathurpadi Dars",
+  description: "Ramadan Quiz Competition Powered by Alathurpadi Dars",
 };
 
 export default function RootLayout({
