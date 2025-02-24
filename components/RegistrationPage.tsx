@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
+// import Image from 'next/image';
+
 
 // Define the type for Razorpay payment response
 type RazorpayPaymentResponse = {
@@ -273,6 +275,8 @@ const RegistrationPage = () => {
           alt="Hero Image"
           className="w-full max-w-xl mb-0 z-10" // Adjust size as needed
         />
+        {/* <Image src="/img.png" alt="Hero Image" className="w-full max-w-xl mb-0 z-10"/> */}
+
   
         {/* Subheadline */}
         <p className="text-sm md:text-lg  text-slate-300 mb-8 z-10 leading-tight p-6">
