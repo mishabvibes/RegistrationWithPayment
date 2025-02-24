@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 
 // Define the type for Razorpay payment response
@@ -270,12 +270,12 @@ const RegistrationPage = () => {
         <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
   
         {/* Replace Logo and Heading with a PNG Image */}
-        {/* <img
+        <img
           src="/img.png" // Replace with your PNG image path
           alt="Hero Image"
           className="w-full max-w-xl mb-0 z-10" // Adjust size as needed
-        /> */}
-        <Image src="/img.png" alt="Hero Image" className="w-full max-w-xl mb-0 z-10"/>
+        />
+        {/* <Image src="/img.png" alt="Hero Image" className="w-full max-w-xl mb-0 z-10"/> */}
 
   
         {/* Subheadline */}
