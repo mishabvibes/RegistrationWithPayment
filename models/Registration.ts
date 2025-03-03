@@ -25,6 +25,14 @@ const registrationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  referredBy: {
+    type: String,
+    default: null,
+  },
+  referrals: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

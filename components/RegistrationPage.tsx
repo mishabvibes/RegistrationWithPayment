@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Script from 'next/script';
 import { Loader2 } from 'lucide-react';
-// import Image from 'next/image';
-
+import Image from 'next/image';
 
 // Define the type for Razorpay payment response
 type RazorpayPaymentResponse = {
@@ -19,18 +18,36 @@ const RegistrationPage = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [registrationCode, setRegistrationCode] = useState('');
   const [isCopied, setIsCopied] = useState(false);
+  const [validReferral, setValidReferral] = useState(true);
+  const [checkingReferral, setCheckingReferral] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     address: '',
-    phone: ''
+    phone: '',
+    referredBy: ''
   });
 
   const [errors, setErrors] = useState({
     name: '',
     address: '',
-    phone: ''
+    phone: '',
+    referredBy: ''
   });
+
+  // Extract referral code from URL if present
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get('ref');
+      if (code) {
+        setFormData(prev => ({
+          ...prev,
+          referredBy: code
+        }));
+      }
+    }
+  }, []);
 
   // Generate a unique registration code
   const generateUniqueCode = async () => {
@@ -94,7 +111,8 @@ const RegistrationPage = () => {
     const newErrors = {
       name: '',
       address: '',
-      phone: ''
+      phone: '',
+      referredBy: ''
     };
 
     if (!formData.name.trim()) {
@@ -111,6 +129,11 @@ const RegistrationPage = () => {
       newErrors.phone = 'Phone number is required';
     } else if (!/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
+      isValid = false;
+    }
+
+    if (formData.referredBy && !validReferral) {
+      newErrors.referredBy = 'Invalid referral code';
       isValid = false;
     }
 
@@ -140,9 +163,44 @@ const RegistrationPage = () => {
             ...prev,
             phone: 'This phone number is already registered'
           }));
+        } else {
+          setErrors(prev => ({
+            ...prev,
+            phone: ''
+          }));
         }
       } catch (error) {
         console.error('Error checking duplicate:', error);
+      }
+    }
+
+    // Validate referral code
+    if (name === 'referredBy' && value) {
+      setCheckingReferral(true);
+      try {
+        const response = await fetch('/api/check-referral', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ referralCode: value })
+        });
+        
+        const data = await response.json();
+        setValidReferral(data.valid);
+        if (!data.valid) {
+          setErrors(prev => ({
+            ...prev,
+            referredBy: 'Invalid referral code'
+          }));
+        } else {
+          setErrors(prev => ({
+            ...prev,
+            referredBy: ''
+          }));
+        }
+      } catch (error) {
+        console.error('Error checking referral:', error);
+      } finally {
+        setCheckingReferral(false);
       }
     }
   };
@@ -207,6 +265,14 @@ const RegistrationPage = () => {
     });
   };
 
+  const handleCopyReferralLink = () => {
+    const referralUrl = `${window.location.origin}?ref=${registrationCode}`;
+    navigator.clipboard.writeText(referralUrl).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+    });
+  };
+
   // Show success screen
   if (showSuccess) {
     return (
@@ -224,9 +290,21 @@ const RegistrationPage = () => {
               <p className="text-sm text-slate-600 mb-4">Your Registration Code</p>
               <button
                 onClick={handleCopyCode}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mb-4"
               >
                 {isCopied ? "Copied! ✅" : "Copy Code"}
+              </button>
+            </div>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 shadow-inner mb-6">
+              <p className="text-center text-sm text-blue-800 mb-4">
+                Share your code with friends and earn rewards!
+              </p>
+              <button
+                onClick={handleCopyReferralLink}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                Copy Referral Link
               </button>
             </div>
   
@@ -270,16 +348,18 @@ const RegistrationPage = () => {
         <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
   
         {/* Replace Logo and Heading with a PNG Image */}
-        <img
-          src="/img.png" // Replace with your PNG image path
-          alt="Hero Image"
-          className="w-full max-w-xl mb-0 z-10" // Adjust size as needed
-        />
-        {/* <Image src="/img.png" alt="Hero Image" className="w-full max-w-xl mb-0 z-10"/> */}
-
+        <div className="w-full max-w-xl mb-0 z-10">
+          <Image
+            src="/img.png"
+            alt="Hero Image"
+            width={800}
+            height={400}
+            layout="responsive"
+          />
+        </div>
   
         {/* Subheadline */}
-        <p className="text-sm md:text-lg  text-slate-300 mb-8 z-10 leading-tight p-6">
+        <p className="text-sm md:text-lg text-slate-300 mb-8 z-10 leading-tight p-6">
         Welcome to the Miskunnusook quiz this Ramadan on our Dars website! Test your knowledge with essays from Darshanam Online Magazine and compete for ₹25,000 in prizes. Top prize is ₹15,000, second prize ₹7,777. Good luck to all!
         </p>
   
@@ -304,7 +384,7 @@ const RegistrationPage = () => {
       </div>
   
       {/* Registration Form Section */}
-      <div id="registration-form" className="w-full flex items-center justify-center p-4 -mt-20 z-20 relative shadow-lg">
+      <div id="registration-form" className="w-full flex items-center justify-center p-4 -mt-20 z-20 relative">
         <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
           <div className="p-6">
             <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">
@@ -378,6 +458,35 @@ const RegistrationPage = () => {
                 />
                 {errors.phone && (
                   <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+                )}
+              </div>
+              
+              <div className="space-y-2">
+                <label 
+                  htmlFor="referredBy" 
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Referral Code (Optional)
+                </label>
+                <input
+                  id="referredBy"
+                  name="referredBy"
+                  type="text"
+                  value={formData.referredBy}
+                  onChange={handleInputChange}
+                  placeholder="Enter referral code if you have one"
+                  className={`w-full px-4 py-2 rounded-lg border ${
+                    errors.referredBy ? 'border-red-500' : 'border-slate-300'
+                  } focus:outline-none focus:ring-2 focus:ring-slate-400`}
+                />
+                {checkingReferral && (
+                  <p className="text-sm text-blue-500 mt-1">Checking referral code...</p>
+                )}
+                {errors.referredBy && (
+                  <p className="text-sm text-red-500 mt-1">{errors.referredBy}</p>
+                )}
+                {formData.referredBy && validReferral && !checkingReferral && (
+                  <p className="text-sm text-green-500 mt-1">Valid referral code!</p>
                 )}
               </div>
   

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader2, Search, Download, Edit, Trash2, Plus, Menu } from "lucide-react";
+import { Loader2, Search, Download, Edit, Trash2, Plus, Menu, Users } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,8 @@ type Registration = {
   phone: string;
   address: string;
   paymentId: string;
+  referredBy: string | null;
+  referrals: number;
 };
 
 // Custom DropdownMenu Component
@@ -65,6 +67,8 @@ const AdminDashboard = () => {
     address: "",
     paymentId: "",
     registrationCode: "",
+    referredBy: "",
+    referrals: 0
   });
   const { logout } = useAuth();
 
@@ -94,6 +98,8 @@ const AdminDashboard = () => {
       address: "",
       paymentId: "",
       registrationCode: "MN" + Math.floor(Math.random() * 9000 + 1000),
+      referredBy: "",
+      referrals: 0
     });
     setIsDialogOpen(true);
   };
@@ -153,13 +159,23 @@ const AdminDashboard = () => {
     (reg) =>
       reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reg.phone.includes(searchTerm) ||
-      reg.registrationCode.includes(searchTerm)
+      reg.registrationCode.includes(searchTerm) ||
+      (reg.referredBy && reg.referredBy.includes(searchTerm))
   );
 
   const exportToCSV = () => {
-    const headers = ['Registration Code', 'Name', 'Phone', 'Address', 'Payment ID'];
+    const headers = ['Registration Code', 'Name', 'Phone', 'Address', 'Payment ID', 'Referred By', 'Referrals', 'Prize Amount (₹)'];
     const csvData = filteredRegistrations.map(reg =>
-      [reg.registrationCode, reg.name, reg.phone, reg.address, reg.paymentId].join(',')
+      [
+        reg.registrationCode, 
+        reg.name, 
+        reg.phone, 
+        reg.address, 
+        reg.paymentId, 
+        reg.referredBy || '', 
+        reg.referrals, 
+        (reg.referrals * 7).toFixed(2)
+      ].join(',')
     );
 
     const csv = [headers.join(','), ...csvData].join('\n');
@@ -170,6 +186,25 @@ const AdminDashboard = () => {
     a.download = 'registrations.csv';
     a.click();
     window.URL.revokeObjectURL(url);
+  };
+
+  const getTopReferrers = () => {
+    return [...registrations]
+      .filter(reg => reg.referrals > 0)
+      .sort((a, b) => b.referrals - a.referrals)
+      .slice(0, 5);
+  };
+
+  const getTotalReferrals = () => {
+    return registrations.reduce((total, reg) => total + reg.referrals, 0);
+  };
+
+  const getTotalPrizeAmount = () => {
+    return registrations.reduce((total, reg) => total + (reg.referrals * 7), 0);
+  };
+
+  const getReferralPrize = (referrals: number) => {
+    return (referrals * 7).toFixed(2);
   };
 
   const MobileRegistrationCard = ({ reg }: { reg: Registration }) => (
@@ -211,6 +246,22 @@ const AdminDashboard = () => {
         <p className="flex items-center text-slate-600">
           <span className="w-20 text-slate-400">Payment:</span>
           {reg.paymentId}
+        </p>
+        <p className="flex items-center text-slate-600">
+          <span className="w-20 text-slate-400">Referred By:</span>
+          {reg.referredBy || 'None'}
+        </p>
+        <p className="flex items-center text-slate-600">
+          <span className="w-20 text-slate-400">Referrals:</span>
+          <span className={reg.referrals > 0 ? "font-medium text-green-600" : ""}>
+            {reg.referrals}
+          </span>
+        </p>
+        <p className="flex items-center text-slate-600">
+          <span className="w-20 text-slate-400">Prize:</span>
+          <span className={reg.referrals > 0 ? "font-medium text-green-600" : ""}>
+            ₹{getReferralPrize(reg.referrals)}
+          </span>
         </p>
       </div>
     </div>
@@ -261,7 +312,7 @@ const AdminDashboard = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search by name, phone, or code..."
+                placeholder="Search by name, phone, code, or referral..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -272,6 +323,43 @@ const AdminDashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Referral Summary Box */}
+        <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">Referral Summary</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+              <div className="text-blue-600 text-sm mb-1">Total Referrals</div>
+              <div className="text-2xl font-bold">{getTotalReferrals()}</div>
+            </div>
+            <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+              <div className="text-green-600 text-sm mb-1">Total Prize Amount</div>
+              <div className="text-2xl font-bold">₹{getTotalPrizeAmount().toFixed(2)}</div>
+            </div>
+          </div>
+        </div>
+          
+        {/* Top Referrers Box */}
+        {getTopReferrers().length > 0 && (
+          <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+              <Users className="w-5 h-5 mr-2 text-blue-500" />
+              Top Referrers
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {getTopReferrers().map((referrer) => (
+                <div key={referrer.registrationCode} className="border border-slate-200 rounded-lg p-3 bg-slate-50">
+                  <div className="font-medium">{referrer.name}</div>
+                  <div className="text-sm text-slate-500">{referrer.registrationCode}</div>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-green-600 font-bold">Referrals: {referrer.referrals}</span>
+                    <span className="text-lg text-green-600 font-bold">₹{getReferralPrize(referrer.referrals)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Mobile View */}
         <div className="sm:hidden">
           {filteredRegistrations.map((reg) => (
@@ -290,6 +378,9 @@ const AdminDashboard = () => {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Phone</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Address</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Payment ID</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Referred By</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Referrals</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">Prize (₹)</th>
                   <th className="px-6 py-4 text-right text-sm font-semibold text-slate-600">Actions</th>
                 </tr>
               </thead>
@@ -301,6 +392,11 @@ const AdminDashboard = () => {
                     <td className="px-6 py-4 text-sm text-slate-600">{reg.phone}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{reg.address}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{reg.paymentId}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{reg.referredBy || 'None'}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-green-600">{reg.referrals}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-green-600">
+                      {reg.referrals > 0 ? `₹${getReferralPrize(reg.referrals)}` : '-'}
+                    </td>
                     <td className="px-6 py-4 text-sm text-right">
                       <div className="flex justify-end gap-2">
                         <Button
@@ -387,6 +483,29 @@ const AdminDashboard = () => {
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Referred By (Optional)</label>
+              <input
+                type="text"
+                value={formData.referredBy || ''}
+                onChange={(e) => setFormData({ ...formData, referredBy: e.target.value || null })}
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Referrals</label>
+              <input
+                type="number"
+                value={formData.referrals}
+                onChange={(e) => setFormData({ ...formData, referrals: parseInt(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              {typeof formData.referrals === 'number' && formData.referrals > 0 && (
+                <p className="mt-1 text-sm text-green-600">
+                  Prize amount: ₹{getReferralPrize(formData.referrals)}
+                </p>
+              )}
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
