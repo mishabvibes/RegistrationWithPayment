@@ -342,7 +342,7 @@ const RegistrationPage = () => {
   // Show registration form
   return (
     <div className="min-h-screen bg-slate-200">
-      {/* Home Page Section (Hero Section) */}
+      {/* Home Page Section (Hero Section) */}                                                                                                                                                        
       <div className="h-screen flex flex-col items-center justify-center text-center pt-2 pb-4 bg-[#2D6CCB] relative overflow-hidden">
         {/* Background Blur Effect */}
         <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
