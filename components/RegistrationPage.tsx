@@ -262,7 +262,7 @@ const RegistrationPage = () => {
   // Show registration form
   return (
     <div className="min-h-screen bg-slate-200">
-      {/* Home Page Section (Hero Section) */}
+      {/* Home Page Section (Hero Section) */}                                                                                                                                                        
       <div className="h-screen flex flex-col items-center justify-center text-center pt-2 pb-4 bg-[#2D6CCB] relative overflow-hidden">
         {/* Background Blur Effect */}
         <div className="absolute inset-0 bg-[url('/images/abstract-background.jpg')] bg-cover bg-center blur-sm opacity-20"></div>
@@ -300,7 +300,7 @@ const RegistrationPage = () => {
       </div>
   
       {/* Registration Form Section */}
-      <div id="registration-form" className="w-full flex items-center justify-center p-4 -mt-20 z-20 relative shadow-lg">
+      <div id="registration-form" className="w-full flex items-center justify-center p-4 -mt-20 z-20 relative">
         <div className="w-full max-w-md bg-white/95 backdrop-blur rounded-lg shadow-xl overflow-hidden">
           <div className="p-6">
             <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">
