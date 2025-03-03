@@ -241,7 +241,7 @@ const Footer = () => {
 
                             <div className="prose max-w-none text-gray-700">
                                 <p><strong>Last Updated: 18 Feb 2025</strong></p>
-                                <p>DIGIBAYT ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you visit our website <a href="https://www.digibayt.com" className="text-blue-500 hover:text-blue-700">www.digibayt.com</a> or use our services.</p>
+                                <p>DIGIBAYT (&quotwe,&quot &quotour,&quot or &quotus&quot) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you visit our website <a href="https://www.digibayt.com" className="text-blue-500 hover:text-blue-700">www.digibayt.com</a> or use our services.</p>
 
                                 <h3 className="text-gray-800 mt-6 mb-3">1. Information We Collect</h3>
                                 <ul className="space-y-1">
